@@ -9,14 +9,14 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai_api_key=(os.getenv("OPENAI_API_KEY"))
 
 
-logo_path = r"seo logo.jpg"
+logo_path = r"SEO_vivid\seo logo.jpg"
 st.image(logo_path, width=175)  # Adjust the width as needed
 
 # Use st.markdown to combine the title and logo
 st.markdown(
     """
     <div style="display: flex; align-items: left;">
-        <img src="file://seo logo.jpg" width="50" style="margin-right: 0px;">
+        <img src="file://SEO_vivid\seo logo.jpg" width="50" style="margin-right: 0px;">
         <h1 style="margin: 0;">SEO Writing App</h1>
     </div>
     """,

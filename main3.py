@@ -7,7 +7,7 @@ import os
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 openai_api_key=(os.getenv("OPENAI_API_KEY"))
-
+st.title("SEO Writing App")
 
 # logo_path = r"SEO_vivid\seo logo.jpg"
 # st.image(logo_path, width=175)  # Adjust the width as needed

@@ -53,12 +53,13 @@ def fetch_page_content(url):
     except requests.RequestException as e:
         return f"Error fetching page content: {e}"
 
-def generate_blog(main_keyword, selected_title, language, article_size, tone_of_voice, ai_model, point_of_view, seo_keywords, hook_type, search_query):
-    search_results = fetch_search_results(os.getenv("zenserp_api_key"), search_query)
-    relevant_info = extract_relevant_info(search_results)
+def generate_blog(main_keyword, selected_title, language, article_size, tone_of_voice, ai_model, point_of_view, seo_keywords, hook_type, real_time_search, search_query):
     search_content = ""
-    for info in relevant_info:
-        search_content += f"Title: {info['title']}\nDescription: {info['description']}\nContent: {info['content'][:1000]}...\n\n"  
+    if real_time_search:
+        search_results = fetch_search_results(os.getenv("zenserp_api_key"), search_query)
+        relevant_info = extract_relevant_info(search_results)
+        for info in relevant_info:
+            search_content += f"Title: {info['title']}\nDescription: {info['description']}\nContent: {info['content'][:1000]}...\n\n"
 
     prompt = f"""
     Generate a blog post with the following details:
@@ -95,10 +96,11 @@ with gr.Blocks() as demo:
     language = gr.Dropdown(choices=["English", "Spanish", "French", "German", "Chinese"], label="Language")
     article_size = gr.Dropdown(choices=["X-Small", "Small", "Medium", "Large"], label="Article Size")
     tone_of_voice = gr.Dropdown(choices=["Friendly", "Professional", "Informational", "Transactional", "Inspirational", "Neutral", "Witty", "Casual", "Authoritative", "Encouraging", "Persuasive", "Poetic"], label="Tone of Voice")
-    ai_model = gr.Dropdown(choices=["Anthropic Claude 3 Haiku", "GPT-4"], label="AI Model")
+    ai_model = gr.Dropdown(choices=["GPT-4o"], label="AI Model")
     point_of_view = gr.Dropdown(choices=["First person singular (I, me, my, mine)", "First person plural (we, us, our, ours)", "Second person (you, your, yours)", "Third person (he, she, it, they)"], label="Point of View")
     seo_keywords = gr.Textbox(label="Enter SEO Keywords (comma-separated)")
     hook_type = gr.Dropdown(choices=["Question", "Statistical or Fact", "Quotation", "Personal or Emotional"], label="Type of Hook")
+    real_time_search = gr.Checkbox(label="Real Time Search")
     search_query = gr.Textbox(label="Enter Search Query for Real-Time Search")
 
     generate_button = gr.Button("Generate Blog")
@@ -111,7 +113,7 @@ with gr.Blocks() as demo:
 
     generate_button.click(
         generate_blog,
-        inputs=[main_keyword, selected_title, language, article_size, tone_of_voice, ai_model, point_of_view, seo_keywords, hook_type, search_query],
+        inputs=[main_keyword, selected_title, language, article_size, tone_of_voice, ai_model, point_of_view, seo_keywords, hook_type, real_time_search, search_query],
         outputs=gr.Markdown()
     )
 
